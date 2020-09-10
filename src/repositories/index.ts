@@ -1,0 +1,1 @@
+export { queryRepository } from './query';

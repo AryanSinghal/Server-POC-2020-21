@@ -1,10 +1,9 @@
 import * as express from 'express';
-// import { default as mainRouter } from './router';
+import { default as mainRouter } from './router';
 import * as bodyParser from 'body-parser';
 import * as compression from 'compression';
 import { notFoundRoute, errorHandler } from './libs/routes';
 import Database from './libs/Database';
-// import { options } from './libs/constant';
 
 export class Server {
   private app: express.Express;
@@ -49,7 +48,7 @@ export class Server {
   public setupRoutes = (): void => {
     const { app }: Server = this;
     app.get('/health-check', (req: express.Request, res: express.Response) => res.send('I am OK'));
-    // app.use('/api', mainRouter);
+    app.use('/api', mainRouter);
     app.use(notFoundRoute);
     app.use(errorHandler);
   }
