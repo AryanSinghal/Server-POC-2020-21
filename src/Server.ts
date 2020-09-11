@@ -4,6 +4,7 @@ import * as bodyParser from 'body-parser';
 import * as compression from 'compression';
 import { notFoundRoute, errorHandler } from './libs/routes';
 import Database from './libs/Database';
+import logger from './libs/logger';
 
 export class Server {
   private app: express.Express;
@@ -24,9 +25,9 @@ export class Server {
       await Database.open(mongoUrl);
       app.listen(port, (err) => {
         if (err) {
-          console.log(err);
+          logger.error(err);
         }
-        console.log(`Express app Successfully started on port : ${port} `);
+        logger.info(`Express app Successfully started on port : ${port} `);
       });
     }
     catch (err) {

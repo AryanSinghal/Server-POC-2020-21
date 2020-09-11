@@ -1,13 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
+import logger from '../logger';
 
 export default (config) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    console.group('---------Validation Handler---------');
-    console.log(config);
-    console.log(req.body);
+    logger.info('---------Validation Handler---------');
+    logger.info(config);
+    logger.info(req.body);
     const err = [];
     Object.keys(config).forEach(key => {
-      console.log(`---------${key}---------`);
+      logger.info(`---------${key}---------`);
       const { errorMessage } = config[key];
       const { in: reqType } = config[key];
       reqType.forEach(reqMethod => {
@@ -41,7 +42,7 @@ export default (config) => {
         }
         else {
           if (config[key].regex !== undefined && keyValue !== undefined) {
-            console.log('inside regex');
+            logger.info('inside regex');
             const { regex } = config[key];
             if (!regex.test(keyValue)) {
               const obj = {
@@ -71,7 +72,6 @@ export default (config) => {
       });
     });
     if (err.length === 0) {
-      console.groupEnd();
       return next();
     }
     else {
@@ -80,8 +80,7 @@ export default (config) => {
         status: 400,
         error: err,
       };
-      console.error(error);
-      console.groupEnd();
+      logger.error(error);
       return next(error);
     }
   };

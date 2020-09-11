@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+import logger from './logger';
 // import seedData from './seedData';
 
 export default class Database {
@@ -8,7 +9,7 @@ export default class Database {
         if (err) {
           reject(err);
         }
-        console.log('Database Connected at :', mongoUrl);
+        logger.info('Database Connected at :', mongoUrl);
         // seedData();
         resolve();
       });
@@ -17,6 +18,6 @@ export default class Database {
   }
   static disconnect = () => {
     mongoose.disconnect();
-    console.log('Database disconnected');
+    logger.info('Database disconnected');
   };
 }
