@@ -8,8 +8,9 @@ class QuerySchema extends VersionableSchema {
             name: String,
             email: String,
             mob: Number,
-            createdAt: Date,
-            query: String
+            query: String,
+            comment: String,
+            resolved: { type: Boolean, default: false }
         };
         super(querySchema, options);
     }

@@ -7,8 +7,8 @@ const queryRoute: Router = Router();
 
 queryRoute.route('/')
   .get(validationHandler(validation.get), queryController.list)
-  .post(validationHandler(validation.create), queryController.create);
-
+  .post(validationHandler(validation.create), queryController.create)
+  .put(validationHandler(validation.update), queryController.update);
 queryRoute.route('/:id').delete(validationHandler(validation.delete), queryController.delete);
 
 export default queryRoute;

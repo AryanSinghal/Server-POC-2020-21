@@ -6,6 +6,7 @@ export default interface IQueryModel extends IVersionableDocument {
     name: string;
     email: string;
     mob: number;
-    createdAt: Date;
-    query: String;
+    query: string;
+    comment: string;
+    resolved: boolean;
 }

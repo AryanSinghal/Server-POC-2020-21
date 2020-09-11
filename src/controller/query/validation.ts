@@ -1,23 +1,19 @@
 const validation = {
-  create:
-  {
-    name:
-    {
+  create: {
+    name: {
       required: true,
       regex: /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/,
       in: ['body'],
       errorMessage: 'Name is required',
     },
-    email:
-    {
+    email: {
       required: true,
       string: true,
       regex: /[a-z]([[-]*\w+[.]*){1,63}@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/,
       in: ['body'],
       errorMessage: 'email is required',
     },
-    mob:
-    {
+    mob: {
       required: true,
       number: true,
       regex: /[0-9]+$/,
@@ -45,19 +41,36 @@ const validation = {
 
     }
   },
-  delete:
-  {
-    id:
-    {
+  delete: {
+    id: {
       required: true,
       errorMessage: 'Id is required',
       in: ['params']
     }
   },
-  get:
-  {
-    skip:
-    {
+  update: {
+    id: {
+      required: true,
+      errorMessage: 'Id is required',
+      in: ['body']
+    },
+    dataToUpdate: {
+      in: ['body'],
+      required: true,
+      isObject: true,
+      errorMessage: 'Data is required',
+      custom: (reqMethod, req, res, next) => {
+        if (typeof req[reqMethod] !== 'object') {
+          return true;
+        }
+        if (req[reqMethod].comment === undefined || req[reqMethod].query.length > 150 || req[reqMethod].query.length < 1)
+          return true;
+        return false
+      }
+    }
+  },
+  get: {
+    skip: {
       required: false,
       default: 0,
       number: true,
@@ -66,12 +79,11 @@ const validation = {
       errorMessage: 'Skip is invalid',
       custom: (reqMethod, req, res, next): void => {
         if (req[reqMethod].skip === undefined) {
-          req[reqMethod].skip = '0';
+          req[reqMethod].skip = 0;
         }
       }
     },
-    limit:
-    {
+    limit: {
       required: false,
       default: 10,
       number: true,
@@ -80,19 +92,18 @@ const validation = {
       errorMessage: 'Limit is invalid',
       custom: (reqMethod, req, res, next): void => {
         if (req[reqMethod].limit === undefined) {
-          req[reqMethod].limit = '10';
+          req[reqMethod].limit = 10;
         }
       }
     },
-    order:
-    {
+    order: {
       required: false,
       default: 1,
       in: ['query'],
       errorMessage: 'Order is invalid',
       custom: (reqMethod, req, res, next): void => {
         if (req[reqMethod].order === undefined || req[reqMethod].order !== '-1') {
-          req[reqMethod].order = '1';
+          req[reqMethod].order = 1;
         }
       }
     }

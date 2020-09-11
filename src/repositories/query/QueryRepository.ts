@@ -13,24 +13,21 @@ class QueryRepository extends VersioningRepository<IQueryModel> {
     return super.create(data);
   }
 
-  delete = (id) => {
-    console.log(id);
-    // return this.queryModel.update({ id }, { deleted: true });
-    // return super.delete(id);
+  delete = (query) => {
+    console.log(query);
+    return super.delete(query);
   }
 
-  update = (id, updatedData) => {
-    // return super.update(userId, id, updatedData);
+  update = (condition, updatedData, options = {}) => {
+    return super.update(condition, updatedData, options);
   }
 
   count = (query = {}) => {
-    // return this.versionModel.countDocuments({ ...query, deletedAt: { $exists: false } });
+    return this.versionModel.countDocuments({ ...query, deletedAt: { $exists: false } });
   }
 
-  list = (query, projection, options) => {
-    const { skip, limit } = options;
-    return this.queryModel.find(query, projection).skip(Number(skip)).limit(Number(limit));
-    // return super.list(query, projection, options);
+  list = (query = {}, projection = {}, options = {}) => {
+    return super.list(query, projection, options);
   }
 }
 

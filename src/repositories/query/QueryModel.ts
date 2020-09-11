@@ -3,12 +3,13 @@ import QuerySchema from './QuerySchema';
 import IQueryModel from './IQueryModel';
 
 const toConvert = {
-  transfers: (docs: any, ret: any) => {
+  transform: (docs: any, ret: any) => {
     ret.id = ret._id;
     delete ret._id;
     delete ret.__v;
   }
 };
+
 
 export const querySchema = new QuerySchema({
   collection: 'Query',
