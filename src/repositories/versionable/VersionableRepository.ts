@@ -8,7 +8,7 @@ export default class VersioningRepository<D extends mongoose.Document> {
 
   public create(document) {
     const id = VersioningRepository.generateObjectId();
-    this.versionModel.create({
+    return this.versionModel.create({
       ...document,
       _id: id,
       originalId: id,

@@ -1,4 +1,5 @@
 import { queryRepository } from '../../repositories';
+import SystemResponse from '../../libs/SystemResponse';
 
 class Controller {
   static instance: Controller;
@@ -9,9 +10,12 @@ class Controller {
   }
   create = async (req, res) => {
     const data = req.body;
-    const response = await queryRepository.create(data);
-    console.log(response);
-    res.send({ success: "ok", response });
+    try {
+      const response = await queryRepository.create(data);
+      SystemResponse.success(res, response, 'Query Successfully uploaded');
+    } catch (error) {
+      SystemResponse.failure(res, error, error.msg);
+    }
   }
 
   list = (req, res) => {

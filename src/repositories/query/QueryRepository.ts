@@ -11,7 +11,6 @@ class QueryRepository extends VersioningRepository<IQueryModel> {
 
   create = (data) => {
     return super.create(data);
-    // return this.queryModel.create({ ...data, createdAt: Date.now() });
   }
 
   delete = (id) => {
