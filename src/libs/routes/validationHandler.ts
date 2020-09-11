@@ -18,11 +18,9 @@ export default (config) => {
             const obj = {
               location: `${reqMethod}`,
               msg: `${errorMessage}`,
-              param: `${key}`,
+              [reqMethod]: `${key}`,
               value: `${keyValue}`
             };
-            obj[reqMethod] = obj.param;
-            delete obj.param;
             err.push(obj);
           }
           if (config[key].regex !== undefined) {
@@ -31,16 +29,13 @@ export default (config) => {
               const obj = {
                 location: `${reqMethod}`,
                 msg: `${key} is invalid`,
-                param: `${key}`,
+                [reqMethod]: `${key}`,
                 value: `${keyValue}`
               };
-              obj[reqMethod] = obj.param;
-              delete obj.param;
               err.push(obj);
             }
           }
-        }
-        else {
+        } else {
           if (config[key].regex !== undefined && keyValue !== undefined) {
             logger.info('inside regex');
             const { regex } = config[key];
@@ -48,27 +43,24 @@ export default (config) => {
               const obj = {
                 location: `${reqMethod}`,
                 msg: `${key} is invalid`,
-                param: `${key}`,
+                [reqMethod]: `${key}`,
                 value: `${keyValue}`
               };
-              obj[reqMethod] = obj.param;
-              delete obj.param;
               err.push(obj);
             }
           }
         }
-        if (config[key].custom !== undefined)
+        if (config[key].custom !== undefined) {
           if (config[key].custom(reqMethod, req, res, next)) {
             const obj = {
               location: `${reqMethod}`,
               msg: `${errorMessage}`,
-              param: `${key}`,
+              [reqMethod]: `${key}`,
               value: `${keyValue}`
             };
-            obj[reqMethod] = obj.param;
-            delete obj.param;
             err.push(obj);
           }
+        }
       });
     });
     if (err.length === 0) {

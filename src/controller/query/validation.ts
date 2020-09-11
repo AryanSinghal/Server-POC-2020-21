@@ -22,7 +22,6 @@ const validation = {
       number: true,
       regex: /[0-9]+$/,
       in: ['body'],
-      length: 10,
       errorMessage: 'mobile no. is required',
       custom: (reqMethod, req, res, next) => {
         if (req[reqMethod].mob !== undefined) {
@@ -36,10 +35,9 @@ const validation = {
       required: true,
       in: ['body'],
       errorMessage: 'Query is required',
-      length: 150,
       custom: (reqMethod, req, res, next) => {
-        if (req[reqMethod].mob !== undefined) {
-          if (req[reqMethod].mob.length !== 150)
+        if (req[reqMethod].query !== undefined) {
+          if (req[reqMethod].query.length > 150 || req[reqMethod].query.length < 1)
             return true;
         }
         return false;
