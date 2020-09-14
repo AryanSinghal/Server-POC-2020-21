@@ -29,6 +29,43 @@ class QueryRepository extends VersioningRepository<IQueryModel> {
   list = (query = {}, projection = {}, options = {}) => {
     return super.list(query, projection, options);
   }
+
+  getPastData = (query, projection, options) => {
+    const { skip, limit, sort } = options;
+    const { email, search } = query;
+    const pipeline = [
+      {
+        $match: {
+          deletedAt: { $exists: false },
+          email
+        },
+      },
+      {
+        $sort: sort,
+      },
+      {
+        $project: projection,
+      },
+      {
+        $facet: {
+          totalCount: [
+            {
+              $count: 'count',
+            },
+          ],
+          list: [
+            {
+              $sort: sort,
+            },
+            { $skip: skip },
+            { $limit: limit },
+          ],
+        },
+      },
+    ];
+    console.log(pipeline);
+    return super.aggregate(pipeline);
+  }
 }
 
 export default new QueryRepository();

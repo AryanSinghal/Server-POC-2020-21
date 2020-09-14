@@ -11,7 +11,13 @@ const searchQuery = (search) => {
   if (search === undefined)
     return {};
   else
-    return { $or: [{ name: { $regex: search, $options: 'i' } }, { email: { $regex: search, $options: 'i' } }] };
+    return {
+      $or: [
+        { name: { $regex: search, $options: 'i' } },
+        { email: { $regex: search, $options: 'i' } },
+        { query: { $regex: search, $options: 'i' } }
+      ]
+    };
 }
 
 export { searchQuery, sortQuery };

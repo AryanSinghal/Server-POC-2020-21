@@ -10,5 +10,7 @@ queryRoute.route('/')
   .post(validationHandler(validation.create), queryController.create)
   .put(validationHandler(validation.update), queryController.update);
 queryRoute.route('/:id').delete(validationHandler(validation.delete), queryController.delete);
+queryRoute.route('/:email').get(validationHandler(validation.getPastData), queryController.getPastData);
+
 
 export default queryRoute;

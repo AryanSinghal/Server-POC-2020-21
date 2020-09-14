@@ -26,7 +26,7 @@ class Controller {
     try {
       const { skip, limit, order, sortBy, search } = req.query;
       const sort = sortQuery(sortBy, order);
-      const query = searchQuery(search);;
+      const query = searchQuery(search);
       const options = { skip: Number(skip), limit: Number(limit), sort };
       console.log(query, {}, options);
       const response = await queryRepository.list(query, {}, options);
@@ -61,6 +61,23 @@ class Controller {
     } catch (error) {
       console.log(error)
       SystemResponse.failure(res, error, 'Unable to delete Query');
+    }
+  }
+
+  getPastData = async (req, res) => {
+    logger.info('--------Get Past Data--------');
+    try {
+      const { email } = req.params;
+      const { skip, limit, order, sortBy, search } = req.query;
+      const sort = sortQuery(sortBy, order);
+      const options = { skip: Number(skip), limit: Number(limit), sort };
+      console.log({ email, search }, { id: 0 }, options);
+      const response = await queryRepository.getPastData({ email, search }, { _id: 0, __v: 0 }, options);
+      console.log(response)
+      SystemResponse.success(res, response, 'List of queries');
+    } catch (error) {
+      console.log(error);
+      SystemResponse.failure(res, error, error.msg);
     }
   }
 }

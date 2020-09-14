@@ -26,7 +26,7 @@ export default class VersioningRepository<D extends mongoose.Document> {
   }
 
   public async update(condition, updatedData, options) {
-    const session = await this.versionModel.startSession({ writeConcern: { w: 1 } });
+    const session = await this.versionModel.startSession();
     session.startTransaction();
     const transactionOptions = {
       readPreference: 'primary',
@@ -67,6 +67,10 @@ export default class VersioningRepository<D extends mongoose.Document> {
 
   public static generateObjectId() {
     return String(mongoose.Types.ObjectId());
+  }
+
+  public aggregate(pipeline) {
+    return this.versionModel.aggregate(pipeline);
   }
 
   // public async cronUpdate(query, document): Promise<D> {
