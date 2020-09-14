@@ -42,12 +42,12 @@ class Controller {
     logger.info('--------Update--------');
     try {
       const { id, dataToUpdate } = req.body;
-      const { comment } = dataToUpdate;
-      const response = await queryRepository.list({ originalId: id }, { comment });
+      const { comment, resolved } = dataToUpdate;
+      const response = await queryRepository.update({ originalId: id }, { comment, resolved });
       console.log(response)
-      SystemResponse.success(res, response, 'Comment Added');
+      SystemResponse.success(res, response, 'Query Updated');
     } catch (error) {
-      SystemResponse.failure(res, error, error.msg);
+      SystemResponse.failure(res, error, 'Unable to Update');
     }
   }
 
@@ -57,10 +57,10 @@ class Controller {
       const { id } = req.params;
       const response = await queryRepository.delete({ originalId: id });
       console.log(response)
-      SystemResponse.success(res, response, 'User Successfully Deleted');
+      SystemResponse.success(res, response, 'Query Successfully Deleted');
     } catch (error) {
       console.log(error)
-      SystemResponse.failure(res, error, error.msg);
+      SystemResponse.failure(res, error, 'Unable to delete Query');
     }
   }
 }

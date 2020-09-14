@@ -63,8 +63,6 @@ const validation = {
         if (typeof req[reqMethod] !== 'object') {
           return true;
         }
-        if (req[reqMethod].comment === undefined || req[reqMethod].query.length > 150 || req[reqMethod].query.length < 1)
-          return true;
         return false
       }
     }

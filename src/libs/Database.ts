@@ -9,7 +9,7 @@ export default class Database {
         if (err) {
           reject(err);
         }
-        logger.info('Database Connected at :', mongoUrl);
+        logger.info(`Database Connected at : ${mongoUrl}`);
         // seedData();
         resolve();
       });
