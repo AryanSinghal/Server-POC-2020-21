@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import Database from '../../libs/Database';
+import logger from '../../libs/logger';
 
 export default class VersioningRepository<D extends mongoose.Document> {
   public versionModel;
@@ -18,24 +18,31 @@ export default class VersioningRepository<D extends mongoose.Document> {
   }
 
   public list(query, projection, options) {
-    return this.versionModel.find(query, projection, options);
+    return this.versionModel.find({ ...query, deletedAt: { $exists: false } }, projection, options);
   }
 
   public delete(query) {
     return this.versionModel.update({ ...query, deletedAt: { $exists: false } }, { deletedAt: new Date() });
   }
 
+  public cronUpdate(query, document) {
+    return this.versionModel.updateMany(query, document);
+  }
+
   public async update(condition, updatedData, options) {
     const session = await this.versionModel.startSession();
-    session.startTransaction();
+    // session.startTransaction();
     const transactionOptions = {
       readPreference: 'primary',
       readConcern: { level: 'local' },
-      writeConcern: { w: 'majority' }
+      writeConcern: { w: 0 }
     };
     try {
       await session.withTransaction(async () => {
         const oldData: any = await this.versionModel.findOne({ ...condition, deletedAt: { $exists: false } });
+        if (!oldData) {
+          throw Error('Data does not exist');
+        }
         const { name, email, mob, query, comment, originalId, resolved } = oldData;
         // await this.versionModel.create({
         //   comment, resolved, ...updatedData, name, email, mob, query, originalId, updatedAt: Date.now(),
@@ -58,7 +65,7 @@ export default class VersioningRepository<D extends mongoose.Document> {
       await session.commitTransaction();
       session.endSession();
     } catch (err) {
-      console.log('abort')
+      logger.error(`abort due to ${err}`)
       await session.abortTransaction();
       session.endSession();
       throw err;
@@ -72,8 +79,4 @@ export default class VersioningRepository<D extends mongoose.Document> {
   public aggregate(pipeline) {
     return this.versionModel.aggregate(pipeline);
   }
-
-  // public async cronUpdate(query, document): Promise<D> {
-  //   return versionmodel.updateMany(query, document);
-  // }
 }
