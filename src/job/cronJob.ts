@@ -1,4 +1,3 @@
-import { CronJob } from 'cron';
 import * as schedule from 'node-schedule';
 import logger from '../libs/logger';
 import { queryRepository } from '../repositories/query'
