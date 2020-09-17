@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { queryRoute, loginRoute } from './controller';
+import { queryRoute, userRoute } from './controller';
 
 const mainRouter: Router = Router();
-mainRouter.use('/login', loginRoute);
+mainRouter.use('/user', userRoute);
 mainRouter.use('/query', queryRoute);
 
 export default mainRouter;

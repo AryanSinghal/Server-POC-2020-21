@@ -31,11 +31,10 @@ export default class VersioningRepository<D extends mongoose.Document> {
 
   public async update(condition, updatedData, options) {
     const session = await this.versionModel.startSession();
-    // session.startTransaction();
     const transactionOptions = {
       readPreference: 'primary',
-      readConcern: { level: 'local' },
-      writeConcern: { w: 0 }
+      readConcern: { level: 'snapshot' },
+      writeConcern: { w: 'majority' }
     };
     try {
       await session.withTransaction(async () => {

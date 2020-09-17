@@ -1,16 +1,17 @@
-import { Router } from 'express';
+import { Router } from 'src/controller/user/node_modules/express';
 import queryController from './Controller';
 import validationHandler from '../../libs/routes/validationHandler';
 import validation from '../../controller/query/validation';
+import { authMiddleWare } from '../../libs/routes/authMiddleWare';
 
 const queryRoute: Router = Router();
 
 queryRoute.route('/')
-  .get(validationHandler(validation.get), queryController.list)
+  .get(authMiddleWare('Users', 'read'), validationHandler(validation.get), queryController.list)
   .post(validationHandler(validation.create), queryController.create)
-  .put(validationHandler(validation.update), queryController.update);
-queryRoute.route('/:id').delete(validationHandler(validation.delete), queryController.delete);
-queryRoute.route('/:email').get(validationHandler(validation.getPastData), queryController.getPastData);
+  .put(authMiddleWare('Users', 'update'), validationHandler(validation.update), queryController.update);
+queryRoute.route('/:id').delete(authMiddleWare('Users', 'delete'), validationHandler(validation.delete), queryController.delete);
+queryRoute.route('/:email').get(authMiddleWare('Users', 'read'), validationHandler(validation.getPastData), queryController.getPastData);
 
 
 export default queryRoute;

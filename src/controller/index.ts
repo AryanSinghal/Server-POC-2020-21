@@ -1,2 +1,2 @@
 export { queryRoute, queryValidation } from './query';
-export { loginRoute } from './login';
+export { userRoute } from './user';
