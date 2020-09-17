@@ -1,4 +1,4 @@
-import { Router } from 'src/controller/user/node_modules/express';
+import { Router } from 'express';
 import queryController from './Controller';
 import validationHandler from '../../libs/routes/validationHandler';
 import validation from '../../controller/query/validation';

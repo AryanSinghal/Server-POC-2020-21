@@ -43,14 +43,6 @@ export default class VersioningRepository<D extends mongoose.Document> {
           throw Error('Data does not exist');
         }
         const { name, email, mob, query, comment, originalId, resolved } = oldData;
-        // await this.versionModel.create({
-        //   comment, resolved, ...updatedData, name, email, mob, query, originalId, updatedAt: Date.now(),
-        // })
-        // throw new Error('transaction check')
-        // await this.versionModel.update(
-        //   { ...condition, deletedAt: { $exists: false } },
-        //   { deletedAt: new Date() }
-        // )
         Promise.all([
           this.versionModel.create({
             comment, resolved, ...updatedData, name, email, mob, query, originalId, updatedAt: Date.now(),
