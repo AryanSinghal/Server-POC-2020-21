@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 import logger from './logger';
-// import seedData from './seedData';
+import seedData from './seedData';
 
 export default class Database {
   static open = (mongoUrl) => {
@@ -10,7 +10,7 @@ export default class Database {
           reject(err);
         }
         logger.info(`Database Connected at : ${mongoUrl}`);
-        // seedData();
+        seedData();
         resolve();
       });
     });
