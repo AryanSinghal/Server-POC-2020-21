@@ -14,7 +14,6 @@ class QueryRepository extends VersioningRepository<IQueryModel> {
   }
 
   delete = (query) => {
-    console.log(query);
     return super.delete(query);
   }
 
@@ -63,7 +62,6 @@ class QueryRepository extends VersioningRepository<IQueryModel> {
         },
       },
     ];
-    console.log(pipeline);
     return super.aggregate(pipeline);
   }
 }

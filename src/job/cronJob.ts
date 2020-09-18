@@ -10,7 +10,6 @@ export default class Job {
       const month = new Date().getMonth();
       const year = new Date().getFullYear() - 1;
       const response = await queryRepository.cronUpdate({ resolved: true, updatedAt: { $lte: new Date(year, month, date + 1) } }, { deletedAt: new Date(), deletedBy: 'Cron Job' });
-      console.log(response);
     });
   }
 }

@@ -29,6 +29,7 @@ class Controller {
       const token = jwt.sign({ email: user.email, id: user.originalId }, config.key, { expiresIn: 900 });
       return SystemResponse.success(res, token);
     } catch (ex) {
+      logger.error(ex);
       SystemResponse.failure(res, ex, ex.message);
     }
   }
@@ -50,6 +51,7 @@ class Controller {
       logger.info('Password Updated');
       return SystemResponse.success(res, 'Password Updated Successfully');
     } catch (ex) {
+      logger.error(ex);
       SystemResponse.failure(res, ex, ex.message);
     }
   }

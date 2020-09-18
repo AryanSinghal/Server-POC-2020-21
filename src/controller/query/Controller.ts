@@ -28,12 +28,11 @@ class Controller {
       const sort = sortQuery(sortBy, order);
       const query = searchQuery(search);
       const options = { skip: Number(skip), limit: Number(limit), sort };
-      console.log(query, {}, options);
       const response = await queryRepository.list(query, {}, options);
       const count = await queryRepository.count();
-      console.log(response)
       SystemResponse.success(res, { ...response, count }, 'List of queries');
     } catch (error) {
+      logger.error(error);
       SystemResponse.failure(res, error, error.msg);
     }
   }
@@ -44,9 +43,9 @@ class Controller {
       const { id, dataToUpdate } = req.body;
       const { comment, resolved } = dataToUpdate;
       const response = await queryRepository.update({ originalId: id }, { comment, resolved });
-      console.log(response)
       SystemResponse.success(res, 'Query Updated');
     } catch (error) {
+      logger.error(error);
       SystemResponse.failure(res, error, 'Unable to Update');
     }
   }
@@ -56,10 +55,13 @@ class Controller {
     try {
       const { id } = req.params;
       const response = await queryRepository.delete({ originalId: id });
-      console.log(response)
-      SystemResponse.success(res, response, 'Query Successfully Deleted');
+      if (!response || !response.n) {
+        throw { message: 'Operation Failed' };
+      }
+      const message = 'Trainee Data Successfully Deleted';
+      SystemResponse.success(res, 'Query Successfully Deleted');
     } catch (error) {
-      console.log(error)
+      logger.error(error);
       SystemResponse.failure(res, error, 'Unable to delete Query');
     }
   }
@@ -71,12 +73,10 @@ class Controller {
       const { skip, limit, order, sortBy, search } = req.query;
       const sort = sortQuery(sortBy, order);
       const options = { skip: Number(skip), limit: Number(limit), sort };
-      console.log({ email, search }, { id: 0 }, options);
       const response = await queryRepository.getPastData({ email, search }, { _id: 0, __v: 0 }, options);
-      console.log(response)
       SystemResponse.success(res, response, 'List of queries');
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       SystemResponse.failure(res, error, error.msg);
     }
   }

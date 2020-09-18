@@ -6,10 +6,10 @@ import logger from '../logger';
 import { userRepository } from '../../repositories';
 
 const authMiddleWare = (module, permissionType) => async (req, res: Response, next: NextFunction) => {
-  console.log('------------AUTHMIDDLEWARE------------', module, permissionType);
+  logger.info('------------AUTHMIDDLEWARE------------', module, permissionType);
   try {
     const token: string = req.headers.authorization;
-    console.log(token);
+    logger.info(`token: ${token}`);
     const { key } = config;
     const decodedUser = jwt.verify(token, key);
     if (!decodedUser) {
@@ -19,13 +19,11 @@ const authMiddleWare = (module, permissionType) => async (req, res: Response, ne
         message: 'Unauthorized Access'
       });
     }
-    console.log(decodedUser);
     const userData = await userRepository.findOne({ originalId: decodedUser.id }, { password: 0 });
-    console.log(userData);
     req.user = userData;
     const role = userData.role;
     if (!hasPermission(module, role, permissionType)) {
-      console.log(`${role} does not permission of ${permissionType}`);
+      logger.error(`${role} does not permission of ${permissionType}`);
       return next({
         status: 403,
         error: 'Unauthorized Access',
@@ -40,7 +38,7 @@ const authMiddleWare = (module, permissionType) => async (req, res: Response, ne
       error: 'Unauthorized Access',
       message: error.message
     }
-    logger.error(err)
+    logger.error(error);
     return next(err);
   }
 };

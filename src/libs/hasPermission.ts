@@ -1,7 +1,8 @@
 import { permissions } from './constant';
+import logger from './logger';
 
 export default function hasPermission(moduleName: string, role: string, permissionType: string): boolean {
-  console.log('hasPermission', moduleName, role, permissionType);
+  logger.info('hasPermission', moduleName, role, permissionType);
   if (permissions[moduleName] === undefined)
     return false;
   const data = permissions[moduleName];

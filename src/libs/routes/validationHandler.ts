@@ -72,7 +72,7 @@ export default (config) => {
         status: 400,
         error: err,
       };
-      logger.error(error);
+      logger.error(err);
       return next(error);
     }
   };
