@@ -37,7 +37,6 @@ class Controller {
     logger.info('---------Update----------');
     try {
       const { email, oldPassword, newPassword } = req.body;
-      console.log({ email, oldPassword, newPassword });
       const user = await userRepository.findOne({ email });
       if (!user) {
         return SystemResponse.failure(res, 'User data not found', 'User not found', 404);
