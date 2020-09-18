@@ -2,6 +2,7 @@ import * as express from 'express';
 import { default as mainRouter } from './router';
 import * as bodyParser from 'body-parser';
 import * as compression from 'compression';
+import cors from 'cors';
 import { CronJob } from './job';
 import { notFoundRoute, errorHandler } from './libs/routes';
 import Database from './libs/Database';
@@ -17,7 +18,7 @@ export class Server {
     this.initCompress();
     this.initCronJob();
     this.initBodyParser();
-    // this.initCors();
+    this.initCors();
     this.setupRoutes();
     return this;
   }
@@ -42,7 +43,15 @@ export class Server {
   private initCronJob() {
     logger.info(`Cron Job has been initialized at: ${new Date()}`);
     const cronJob = new CronJob();
-    cronJob.init();
+    try {
+      cronJob.init();
+    } catch (ex) {
+      logger.error(ex);
+    }
+  }
+
+  private initCors = () => {
+    this.app.use(cors());
   }
 
   private initCompress = () => {
