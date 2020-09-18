@@ -45,7 +45,7 @@ class Controller {
       const { comment, resolved } = dataToUpdate;
       const response = await queryRepository.update({ originalId: id }, { comment, resolved });
       console.log(response)
-      SystemResponse.success(res, response, 'Query Updated');
+      SystemResponse.success(res, 'Query Updated');
     } catch (error) {
       SystemResponse.failure(res, error, 'Unable to Update');
     }

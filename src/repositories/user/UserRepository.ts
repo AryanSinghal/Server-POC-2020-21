@@ -13,14 +13,6 @@ class UserRepository extends VersioningRepository<IUserModel> {
     return super.create(data);
   }
 
-  list = (query = {}, projection = {}, options = {}) => {
-    return super.list(query, projection, options);
-  }
-
-  delete = (user) => {
-    return super.delete(user);
-  }
-
   update = (condition, updatedData, options = {}) => {
     return super.update(condition, updatedData, options);
   }
@@ -30,7 +22,7 @@ class UserRepository extends VersioningRepository<IUserModel> {
   }
 
   findOne = (query, projection = {}, options = {}) => {
-    return this.versionModel.findOne(query, projection, options);
+    return this.versionModel.findOne({ ...query, deletedAt: { $exists: false } }, projection, options);
   }
 }
 

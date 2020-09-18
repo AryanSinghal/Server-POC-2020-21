@@ -8,6 +8,6 @@ const userRoute: Router = Router();
 
 userRoute.route('/')
   .post(validationHandler(validation.login), userController.login)
-  .put(authMiddleWare('Users', 'update'), validationHandler(validation.login), userController.login);
+  .put(authMiddleWare('Users', 'update'),  userController.updatePassword);
 
 export default userRoute;

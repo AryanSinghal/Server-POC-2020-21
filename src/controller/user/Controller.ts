@@ -17,9 +17,7 @@ class Controller {
     logger.info('---------Login----------');
     try {
       const { email, password } = req.body;
-      console.log({ email, password });
       const user = await userRepository.findOne({ email });
-      console.log(user)
       if (!user) {
         return SystemResponse.failure(res, 'User data not found', 'User not found', 404);
       }
@@ -35,6 +33,27 @@ class Controller {
     }
   }
 
+  updatePassword = async (req, res) => {
+    logger.info('---------Update----------');
+    try {
+      const { email, oldPassword, newPassword } = req.body;
+      console.log({ email, oldPassword, newPassword });
+      const user = await userRepository.findOne({ email });
+      if (!user) {
+        return SystemResponse.failure(res, 'User data not found', 'User not found', 404);
+      }
+      const result = await bcrypt.compare(oldPassword, user.password);
+      if (!result) {
+        return SystemResponse.failure(res, 'Password is incorrect', 'Password does not match', 422);
+      }
+      const hash = await bcrypt.hash(newPassword, 10);
+      const resp = await userRepository.update({ email }, { password: hash });
+      logger.info('Password Updated');
+      return SystemResponse.success(res, 'Password Updated Successfully');
+    } catch (ex) {
+      SystemResponse.failure(res, ex, ex.message);
+    }
+  }
 }
 
 export default Controller.getInstance();
